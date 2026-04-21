@@ -47,6 +47,7 @@ function aiMove(){
 }
 
 function scoreMove(input){
+
     const base = {
         rock:3, sword:4, duck:2, pancake:5,
         "black hole":6, universe:10, reality:10
@@ -79,6 +80,36 @@ function scoreMove(input){
     return baseScore * mod * eff;
 }
 
+
+// ⭐ EASTER EGGS
+function checkEasterEggs(input){
+
+    let text = input.toLowerCase();
+
+    if (text === "deltarune") {
+        return {
+            score: 215215,
+            message: "✨ You did Susie's idea"
+        };
+    }
+
+    if (text === "undertale") {
+        return {
+            score: 99999999,
+            message: "ba ba ba papap ba ba do do does 99999999 damage"
+        };
+    }
+
+    if (text.includes("hollow knight")) {
+        return {
+            score: 125,
+            message: "My soul has been eaten by this soulless midget- 125 damage"
+        };
+    }
+
+    return null;
+}
+
 function play(){
 
     let p = document.getElementById("player").value || "nothing";
@@ -89,13 +120,21 @@ function play(){
 
     let result = "";
 
-    if(ps > cs){
+    let egg = checkEasterEggs(p);
+
+    if (egg) {
+        ps = egg.score;
+        result = egg.message;
+    }
+    else if (ps > cs) {
         result = "You win this reality duel.";
         scoreP++;
-    } else if(cs > ps){
+    }
+    else if (cs > ps) {
         result = "AI bends reality harder.";
         scoreC++;
-    } else {
+    }
+    else {
         result = "Paradox stalemate.";
     }
 
