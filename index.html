@@ -1,3 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chaos Combo Engine RPS</title>
+<style>
+body { font-family: Arial; background:#111; color:#eee; text-align:center; padding:40px; }
+input, button { padding:10px; font-size:16px; margin:10px; }
+#log { margin-top:20px; white-space:pre-wrap; }
+</style>
+</head>
+<body>
+
+<h1>Chaos Combo Engine RPS</h1>
+
+<input id="player" placeholder="your move...">
+<br>
+<button onclick="play()">Play</button>
+
+<div id="log"></div>
+
 <script>
 
 let scoreP = 0;
@@ -13,80 +33,33 @@ function maybe(prob){
 
 function aiMove(){
 
-    const modifiers = [
-        "hypnotizing",
-        "cursed",
-        "flaming",
-        "infinite",
-        "giant",
-        "tiny"
-    ];
-
-    const objects = [
-        "rock",
-        "duck",
-        "pancake",
-        "sword",
-        "black hole",
-        "universe",
-        "reality"
-    ];
-
-    const effects = [
-        "summon",
-        "rewrite",
-        "explode",
-        "freeze",
-        "storm",
-        "loop"
-    ];
+    const modifiers = ["hypnotizing","cursed","flaming","infinite","giant","tiny"];
+    const objects = ["rock","duck","pancake","sword","black hole","universe","reality"];
+    const effects = ["summon","rewrite","explode","freeze","storm","loop"];
 
     let parts = [];
 
-    // 50% chance to use a modifier
-    if(maybe(0.5)){
-        parts.push(pick(modifiers));
-    }
-
-    // always pick object
+    if(maybe(0.5)) parts.push(pick(modifiers));
     parts.push(pick(objects));
-
-    // 60% chance for effect
-    if(maybe(0.6)){
-        parts.push(pick(effects));
-    }
+    if(maybe(0.6)) parts.push(pick(effects));
 
     return parts.join(" ");
 }
 
 function scoreMove(input){
-
     const base = {
-        rock: 3,
-        sword: 4,
-        duck: 2,
-        pancake: 5,
-        "black hole": 6,
-        universe: 10,
-        reality: 10
+        rock:3, sword:4, duck:2, pancake:5,
+        "black hole":6, universe:10, reality:10
     };
 
     const modifiers = {
-        hypnotizing: 1.6,
-        cursed: 1.5,
-        flaming: 1.4,
-        giant: 1.7,
-        tiny: 0.8,
-        infinite: 2.0
+        hypnotizing:1.6, cursed:1.5, flaming:1.4,
+        giant:1.7, tiny:0.8, infinite:2.0
     };
 
     const effects = {
-        summon: 1.7,
-        rewrite: 2.5,
-        explode: 1.8,
-        freeze: 1.5,
-        storm: 1.6,
-        loop: 1.4
+        summon:1.7, rewrite:2.5, explode:1.8,
+        freeze:1.5, storm:1.6, loop:1.4
     };
 
     let words = input.toLowerCase().split(" ");
@@ -96,19 +69,12 @@ function scoreMove(input){
     let eff = 1;
 
     for(let w of words){
-
         if(base[w]) baseScore += base[w];
-
         if(modifiers[w]) mod *= modifiers[w];
-
         if(effects[w]) eff *= effects[w];
     }
 
-    let unknowns = words.filter(w =>
-        !base[w] && !modifiers[w] && !effects[w]
-    ).length;
-
-    baseScore += unknowns * 1.5;
+    baseScore += words.length * 0.5;
 
     return baseScore * mod * eff;
 }
@@ -124,13 +90,13 @@ function play(){
     let result = "";
 
     if(ps > cs){
-        result = "Jiyaandore won les goooooooooooo Thobs cookies haribo flavour!!!!!.";
+        result = "You win this reality duel.";
         scoreP++;
     } else if(cs > ps){
-        result = "AI wins sashj.";
+        result = "AI bends reality harder.";
         scoreC++;
     } else {
-        result = "Bob won. But because you no Bob you go to backrooms.";
+        result = "Paradox stalemate.";
     }
 
     document.getElementById("log").innerText =
@@ -144,3 +110,6 @@ You ${scoreP} - ${scoreC} AI`;
 }
 
 </script>
+
+</body>
+</html>
