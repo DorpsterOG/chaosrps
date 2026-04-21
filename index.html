@@ -2,12 +2,51 @@
 <html>
 <head>
 <title>Chaos Combo Engine RPS</title>
+
 <style>
-body { font-family: Arial; background:#111; color:#eee; text-align:center; padding:40px; }
-input, button { padding:10px; font-size:16px; margin:10px; }
-#log { margin-top:20px; white-space:pre-wrap; }
+body { 
+    font-family: Arial; 
+    background:#111; 
+    color:#eee; 
+    text-align:center; 
+    padding:40px;
+    overflow:hidden;
+}
+
+input, button { 
+    padding:10px; 
+    font-size:16px; 
+    margin:10px;
+}
+
+#log { 
+    margin-top:20px; 
+    white-space:pre-wrap; 
+}
+
+/* ✨ floating combo visuals */
+.combo {
+    position: absolute;
+    font-size: 22px;
+    font-weight: bold;
+    color: #00ffcc;
+    pointer-events: none;
+    animation: floatFade 1.2s ease-out forwards;
+}
+
+@keyframes floatFade {
+    0% {
+        opacity: 1;
+        transform: translateY(0px) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-80px) scale(1.3);
+    }
+}
 </style>
 </head>
+
 <body>
 
 <h1>Chaos Combo Engine RPS</h1>
@@ -31,6 +70,19 @@ function maybe(prob){
     return Math.random() < prob;
 }
 
+function showCombo(text){
+    let el = document.createElement("div");
+    el.className = "combo";
+    el.innerText = text;
+
+    el.style.left = (window.innerWidth / 2 + (Math.random()*120 - 60)) + "px";
+    el.style.top = (window.innerHeight / 2 + (Math.random()*80 - 40)) + "px";
+
+    document.body.appendChild(el);
+
+    setTimeout(() => el.remove(), 1200);
+}
+
 function aiMove(){
 
     const modifiers = ["hypnotizing","cursed","flaming","infinite","giant","tiny"];
@@ -50,7 +102,8 @@ function scoreMove(input){
 
     const base = {
         rock:3, sword:4, duck:2, pancake:5,
-        "black hole":6, universe:10, reality:10
+        "black hole":6, universe:10, reality:10,
+        tv:0
     };
 
     const modifiers = {
@@ -78,7 +131,18 @@ function scoreMove(input){
 
     baseScore += words.length * 0.5;
 
-    return baseScore * mod * eff;
+    let finalScore = baseScore * mod * eff;
+
+    // ✨ VISUAL MULTIPLIERS
+    if (mod > 1.2) {
+        showCombo("x" + mod.toFixed(2));
+    }
+
+    if (eff > 2) {
+        showCombo("⚡ x" + eff.toFixed(2));
+    }
+
+    return finalScore;
 }
 
 
@@ -123,20 +187,32 @@ function play(){
 
     let egg = checkEasterEggs(p);
 
+    // 📺 TV MECHANIC
+    let words = p.toLowerCase().split(" ");
+    let hasTV = words.includes("tv");
+
+    if (hasTV) {
+        let steal = cs * 0.45;
+        cs = cs * 0.55;
+        ps += steal;
+
+        showCombo("📺 TV STEAL +45%");
+    }
+
     if (egg) {
         ps = egg.score;
         result = egg.message;
     }
     else if (ps > cs) {
-        result = "You win this reality duel.";
+        result = "Jeff the player won. Ultimate Aura. Oh btw Wilbur and Maiaaaa.";
         scoreP++;
     }
     else if (cs > ps) {
-        result = "AI bends reality harder.";
+        result = "AI wins you seeeeeeeling. Bro, du er så dårlig til det her med en AI, der skal vælge mellem et bestemt sæt ord, at du slår. Arbejder du i hemmelighed for et kunstig intelligens-firma, der prøver at øge moralen i en chatrobots oplevelse ved at lade dem vinde?";
         scoreC++;
     }
     else {
-        result = "Paradox stalemate.";
+        result = "Bob won. Oh wait you are not bob Jeg sender dig ud i baglokalerne for at udgive dig for at være Bob..";
     }
 
     document.getElementById("log").innerText =
