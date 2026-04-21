@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chaos Combo Engine RPS</title>
+<style>
+body { font-family: Arial; background:#111; color:#eee; text-align:center; padding:40px; }
+input, button { padding:10px; font-size:16px; margin:10px; }
+#log { margin-top:20px; white-space:pre-wrap; }
+</style>
+</head>
+<body>
+
+<h1>Chaos Combo Engine RPS</h1>
+<p>Type anything. Now it's a spell system 😄</p>
+
+<input id="player" placeholder="your move...">
+<br>
+<button onclick="play()">Play</button>
+
+<div id="log"></div>
+
+<script>
+
+let scoreP = 0;
+let scoreC = 0;
+
+const base = {
+  rock: 3,
+  sword: 4,
+  duck: 2,
+  pancake: 5,
+  black: 6,
+  hole: 6,
+  universe: 10,
+  reality: 10,
+  time: 8,
+  god: 9
+};
+
+const modifiers = {
+  hypnotizing: 1.6,
+  cursed: 1.5,
+  flaming: 1.4,
+  giant: 1.7,
+  tiny: 0.8,
+  infinite: 2.0
+};
+
+const effects = {
+  sing: 1.3,
+  explode: 1.8,
+  freeze: 1.5,
+  summon: 1.7,
+  rewrite: 2.5
+};
+
+function aiMove(){
+    const pool = [
+        "hypnotizing black hole",
+        "cursed pancake universe",
+        "flaming sword summon",
+        "infinite duck god",
+        "reality rewrite time storm"
+    ];
+    return pool[Math.floor(Math.random()*pool.length)];
+}
+
+function scoreMove(input){
+    let words = input.toLowerCase().split(" ");
+
+    let baseScore = 0;
+    let mod = 1;
+    let eff = 1;
+
+    for(let w of words){
+
+        if(base[w]) baseScore += base[w];
+
+        if(modifiers[w]) mod *= modifiers[w];
+
+        if(effects[w]) eff *= effects[w];
+    }
+
+    let unknowns = words.filter(w =>
+        !base[w] && !modifiers[w] && !effects[w]
+    ).length;
+
+    baseScore += unknowns * 1.5;
+
+    return baseScore * mod * eff;
+}
+
+function play(){
+    let p = document.getElementById("player").value || "nothing";
+    let c = aiMove();
+
+    let ps = scoreMove(p);
+    let cs = scoreMove(c);
+
+    let result = "";
+
+    if(ps > cs){
+        result = "The sigma rizzler human wins. Yas.";
+        scoreP++;
+    } else if(cs > ps){
+        result = "AI slop is win thus round.";
+        scoreC++;
+    } else {
+        result = "Bob won. But none of you are Bob. oh.";
+    }
+
+    document.getElementById("log").innerText =
+`You: ${p} (${ps.toFixed(2)})
+AI: ${c} (${cs.toFixed(2)})
+
+Result: ${result}
+
+Score:
+You ${scoreP} - ${scoreC} AI`;
+}
+
+</script>
+
+</body>
+</html>
