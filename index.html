@@ -35,7 +35,7 @@ function aiMove(){
 
     const modifiers = ["hypnotizing","cursed","flaming","infinite","giant","tiny"];
     const objects = ["rock","duck","pancake","sword","black hole","universe","reality"];
-    const effects = ["summon","rewrite","explode","freeze","storm","loop"];
+    const effects = ["summon","rewrite","explode","freeze","storm","loop","spaghettification"];
 
     let parts = [];
 
@@ -60,7 +60,8 @@ function scoreMove(input){
 
     const effects = {
         summon:1.7, rewrite:2.5, explode:1.8,
-        freeze:1.5, storm:1.6, loop:1.4
+        freeze:1.5, storm:1.6, loop:1.4,
+        spaghettification:1.2346712e9
     };
 
     let words = input.toLowerCase().split(" ");
