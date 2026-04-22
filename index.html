@@ -102,19 +102,20 @@ function scoreMove(input){
 
     const base = {
         rock:3, sword:4, duck:2, pancake:5,
-        "black hole":6, universe:10, reality:10,
+        "black hole":60, universe:10, reality:10,
         tv:0
     };
 
     const modifiers = {
         hypnotizing:1.6, cursed:1.5, flaming:1.4,
-        giant:1.7, tiny:0.8, infinite:2.0
+        giant:1.7, tiny:0.8, infinite:2.0 duckly: 5.3
     };
 
     const effects = {
         summon:1.7, rewrite:2.5, explode:1.8,
         freeze:1.5, storm:1.6, loop:1.4,
-        spaghettification:1.2346712e9
+        spaghettification:1.2346712e9 quasarianed: 57.85
+    Blessed : 2.5
     };
 
     let words = input.toLowerCase().split(" ");
@@ -197,6 +198,28 @@ function play(){
         ps += steal;
 
         showCombo("📺 TV STEAL +45%");
+    }
+        // 📺 BOMB MECHANIC
+    let words = p.toLowerCase().split(" ");
+    let hasTV = words.includes("bomb");
+
+    if (hasTV) {
+        let steal = cs * 0.90;
+        cs = cs * 0.10;
+        ps += steal;
+
+        showCombo("Kaboom  STEAL +90%");
+    }
+        // 📺 POISON MECHANIC
+    let words = p.toLowerCase().split(" ");
+    let hasTV = words.includes("poisoned");
+
+    if (hasTV) {
+        let steal = cs * 0.35;
+        cs = cs * 0.2;
+        ps += steal;
+
+        showCombo("The green trials");
     }
 
     if (egg) {
